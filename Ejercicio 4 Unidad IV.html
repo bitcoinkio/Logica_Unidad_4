@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Factura Telefónica ACME</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #resultados {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            display: none;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+        .descuento {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <h1>Factura Telefónica ACME</h1>
+    
+    <div class="input-group">
+        <label for="numeroTelefono">Número de teléfono:</label>
+        <input type="text" id="numeroTelefono" required>
+    </div>
+    
+    <div class="input-group">
+        <label for="totalLlamadas">Total de llamadas realizadas:</label>
+        <input type="number" id="totalLlamadas" min="0" required>
+    </div>
+    
+    <div class="input-group">
+        <label for="totalMinutos">Total de minutos consumidos:</label>
+        <input type="number" id="totalMinutos" min="0" required>
+    </div>
+    
+    <button onclick="calcularFactura()">Calcular Factura</button>
+    
+    <div id="resultados">
+        <h2>Detalle de Factura</h2>
+        <p><strong>Número de teléfono:</strong> <span id="numTel"></span></p>
+        <p><strong>Total llamadas:</strong> <span id="llamadas"></span></p>
+        <p><strong>Total minutos:</strong> <span id="minutos"></span></p>
+        
+        <h3>Desglose de Costos</h3>
+        <p><strong>Costo base:</strong> <span id="costoBase"></span> Bs</p>
+        <p><strong>Descuento aplicado:</strong> <span id="descuento" class="descuento"></span></p>
+        
+        <p class="total">TOTAL A PAGAR: <span id="totalPagar"></span> Bs</p>
+    </div>
+
+    <script>
+        function calcularFactura() {
+            // Obtener valores del formulario
+            const numeroTelefono = document.getElementById('numeroTelefono').value;
+            const totalLlamadas = parseInt(document.getElementById('totalLlamadas').value);
+            const totalMinutos = parseInt(document.getElementById('totalMinutos').value);
+            
+            // Validar entradas
+            if (!numeroTelefono || isNaN(totalLlamadas) || isNaN(totalMinutos) || totalLlamadas < 0 || totalMinutos < 0) {
+                alert("Por favor complete todos los campos con valores válidos");
+                return;
+            }
+            
+            // Calcular costo base según minutos
+            let costoBase;
+            if (totalMinutos <= 50) {
+                costoBase = 100;
+            } else if (totalMinutos <= 100) {
+                costoBase = 120;
+            } else if (totalMinutos <= 200) {
+                costoBase = 150;
+            } else if (totalMinutos <= 300) {
+                costoBase = 200;
+            } else {
+                costoBase = 250;
+            }
+            
+            // Calcular descuento según llamadas
+            let porcentajeDescuento;
+            if (totalLlamadas <= 20) {
+                porcentajeDescuento = 5;
+            } else if (totalLlamadas <= 100) {
+                porcentajeDescuento = 7;
+            } else if (totalLlamadas <= 200) {
+                porcentajeDescuento = 9;
+            } else {
+                porcentajeDescuento = 10;
+            }
+            
+            // Calcular monto final
+            const descuento = costoBase * (porcentajeDescuento / 100);
+            const montoFinal = costoBase - descuento;
+            
+            // Mostrar resultados
+            document.getElementById('numTel').textContent = numeroTelefono;
+            document.getElementById('llamadas').textContent = totalLlamadas;
+            document.getElementById('minutos').textContent = totalMinutos;
+            document.getElementById('costoBase').textContent = costoBase;
+            document.getElementById('descuento').textContent = `${porcentajeDescuento}% (${descuento.toFixed(2)} Bs)`;
+            document.getElementById('totalPagar').textContent = montoFinal.toFixed(2);
+            
+            document.getElementById('resultados').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

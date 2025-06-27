@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Promedio de Notas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 8px;
+            width: 100px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #resultados {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+        }
+        .aprobado {
+            color: green;
+            font-weight: bold;
+        }
+        .reprobado {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Promedio</h1>
+    <p>Ingrese las 6 notas del estudiante (0-20 puntos):</p>
+    
+    <div id="inputs"></div>
+    <button onclick="calcular()">Calcular</button>
+    
+    <div id="resultados" style="margin-top: 20px;"></div>
+
+    <script>
+        // Generar inputs dinámicamente
+        const inputsDiv = document.getElementById('inputs');
+        for (let i = 1; i <= 6; i++) {
+            inputsDiv.innerHTML += `
+                <div class="input-group">
+                    <label>Materia ${i}:</label>
+                    <input type="number" id="nota${i}" min="0" max="20" step="0.1" placeholder="0-20 puntos">
+                </div>
+            `;
+        }
+
+        function calcular() {
+            let notas = [];
+            let suma = 0;
+            let aprobadas = 0;
+            const notaMinima = 10; // 10 puntos para aprobar
+
+            // Obtener y validar notas
+            for (let i = 1; i <= 6; i++) {
+                const nota = parseFloat(document.getElementById(`nota${i}`).value);
+                
+                if (isNaN(nota)) {
+                    alert(`Ingrese una nota válida para la materia ${i}`);
+                    document.getElementById(`nota${i}`).focus();
+                    return;
+                }
+                
+                if (nota < 0 || nota > 20) {
+                    alert(`La nota debe estar entre 0 y 20 puntos (Materia ${i})`);
+                    document.getElementById(`nota${i}`).focus();
+                    return;
+                }
+                
+                notas.push(nota);
+                suma += nota;
+                
+                if (nota >= notaMinima) {
+                    aprobadas++;
+                }
+            }
+
+            // Calcular y mostrar resultados
+            const promedio = suma / 6;
+            const reprobadas = 6 - aprobadas;
+            
+            document.getElementById('resultados').innerHTML = `
+                <h3>Resultados:</h3>
+                <p><strong>Notas ingresadas:</strong> ${notas.join(', ')}</p>
+                <p><strong>Promedio:</strong> ${promedio.toFixed(2)}</p>
+                <p><strong>Aprobadas (≥10):</strong> <span class="aprobado">${aprobadas}</span></p>
+                <p><strong>Reprobadas (<10):</strong> <span class="reprobado">${reprobadas}</span></p>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cálculo de Salario</title>
+    <script>
+        function calcularSalario() {
+            let nombre = document.getElementById("nombre").value;
+            let salarioHora = parseFloat(document.getElementById("salario").value);
+            let horas = parseFloat(document.getElementById("horas").value);
+
+            let horasNormales = 48;
+            let porcentajeRecargo = 0.35;
+            let salarioNeto;
+
+            if (horas > horasNormales) {
+                let horasExtras = horas - horasNormales;
+                salarioNeto = (horasNormales * salarioHora) + (horasExtras * salarioHora * (1 + porcentajeRecargo));
+            } else {
+                salarioNeto = horas * salarioHora;
+            }
+
+            alert("Nombre: " + nombre + "\nSalario neto: $" + salarioNeto.toFixed(2));
+        }
+    </script>
+</head>
+<body>
+    <input type="text" id="nombre" placeholder="Nombre">
+    <input type="number" id="salario" placeholder="Salario por hora">
+    <input type="number" id="horas" placeholder="Horas trabajadas">
+    <button onclick="calcularSalario()">Calcular</button>
+</body>
+</html>
